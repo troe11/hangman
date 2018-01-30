@@ -1,41 +1,47 @@
-var wordBuilder = function(word) {
+var inquirer = require('inquirer');
+
+var wordCreator = function(word) {
     this.word = word;
+    this.blankWord = '';
     this.letters = function() {
         var pushLetters = '';
         for (let i = 0; i < word.length; i++) {
             pushLetters += word[i] + ' ';
         }
         return pushLetters;
-    }
-}
-
-var blankBuilder = function(word) {
-    this.word = word;
-    this.letters = function() {
-        var pushLetters = '';
+    };
+    this.blanks = function() {
+        var pushBlanks = '';
         for (let i = 0; i < word.length; i++) {
-            pushLetters += '_ ';
+            pushBlanks += '_ ';
         }
-        return pushLetters;
+        console.log(pushBlanks);
+    }
+    this.checkLetter = function() {
+        var wordWithBlanks = this.letters();
+        var justBlanks = '';
+        console.log(justBlanks);
+        var runGame = function() {
+            inquirer.prompt([{
+                type: 'input',
+                message: 'Guess a letter',
+                name: 'letter'
+            }]).then(function(mess) {
+                var c = mess.letter;
+                for (let i = 0; i < wordWithBlanks.length; i++) {
+                    if (wordWithBlanks.charAt(i) == c) {
+                        justBlanks.charAt(i)=c;
+                    } else if (wordWithBlanks[i] == ' ') {
+                        justBlanks.charAt(i)= ' ';
+                    } else{justBlanks.charAt(i)='_'}
+                }
+                console.log(justBlanks);
+            runGame();
+            })
+            
+        }
+        runGame();
     }
 }
-var compRepl = function(c, word, blWord) {
 
-    for (let i = 0; i < word.length; i++) {
-        if (c == word[i]) {
-
-            blWord[i] = c;
-        } else if (word[i] == ' ') {
-           blWord[i] = ' ';
-        } else { blWord[i]= '_'; }
-
-    }
-    console.log(blWord);
-}
-
-
-module.exports = {
-    wordBuilder: wordBuilder,
-    blankBuilder: blankBuilder,
-    compRepl: compRepl
-}
+module.exports = wordCreator;
